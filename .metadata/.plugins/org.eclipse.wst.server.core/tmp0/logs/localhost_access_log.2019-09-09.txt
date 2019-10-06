@@ -1,0 +1,4 @@
+127.0.0.1 - - [09/Sep/2019:16:51:12 -0300] "GET / HTTP/1.1" 404 1086
+127.0.0.1 - - [09/Sep/2019:16:51:13 -0300] "GET /demo/WEB-INF/classes/com/example/demo/HelloSpringController.java HTTP/1.1" 404 1059
+0:0:0:0:0:0:0:1 - - [09/Sep/2019:16:51:21 -0300] "GET /hello HTTP/1.1" 404 1091
+0:0:0:0:0:0:0:1 - - [09/Sep/2019:16:51:21 -0300] "GET /favicon.ico HTTP/1.1" 404 1097

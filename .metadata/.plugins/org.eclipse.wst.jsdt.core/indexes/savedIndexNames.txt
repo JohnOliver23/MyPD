@@ -1,0 +1,8 @@
+INDEX VERSION 1.4+/home/john/Documentos/Programacao DIstribuida/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+3099133367.index
+1924484980.index
+3479561386.index
+1305460327.index
+4267209738.index
+512590464.index
+3007891839.index

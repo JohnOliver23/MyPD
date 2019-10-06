@@ -1,0 +1,6 @@
+package br.edu.ifpb.gugawag.so.sockets;
+
+public class ServerThread extends Thread {
+
+	
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from project &apos;PublisherSubscriber&apos;&#x0A;- Original project: &apos;PublisherSubscriber&apos;&#x0A;- Original element: &apos;br.edu.ifpb.gugawag.so.sockets.Subscritor.java&apos;" description="Delete element" element1="/src&lt;br.edu.ifpb.gugawag.so.sockets{Subscritor.java" elements="1" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1570324160282" subPackages="false" version="1.0"/>
+</session>

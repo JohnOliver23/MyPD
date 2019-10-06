@@ -1,0 +1,15 @@
+package br.edu.ifpb.gugawag.so.sockets;
+
+import java.io.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Map;
+
+public class ServerThread extends Thread {
+
+	
+}

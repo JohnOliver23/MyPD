@@ -1,0 +1,45 @@
+package br.edu.ifpb.gugawag.so.sockets;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Map;
+
+public class ServerThread extends Thread {
+
+	private Socket clientSocket;
+	private Map<String, ArrayList<Subscritor>> topics;
+	private Map<String, String> news;
+	private String newTopic = null;
+	
+	public ServerThread(Socket clientSocket, Map<String, ArrayList<Subscritor>> topics, Map<String, String> news) {
+		this.clientSocket = clientSocket;
+		this.topics = topics;
+		this.news = news;
+	}
+	
+	public void run () {
+		DataOutputStream dos = null;
+		DataInputStream dis = null;
+		String topic = "";
+		String ip = "";
+		int porta = 0;
+		Subscritor subscritor;
+		ArrayList<Subscritor> subscritors;
+		Socket socket = null;
+		DataOutputStream dosMsg = null;
+		DataInputStream disMsg = null;
+		boolean notSend = true;
+		
+		try {
+			dos = new DataOutputStream(clientSocket.getOutputStream());
+			dis = new DataInputStream(clientSocket.getInputStream());
+			ip = clientSocket.getInetAddress().getHostAddress();
+			porta = clientSocket.getPort();
+		} catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+}

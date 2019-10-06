@@ -1,0 +1,135 @@
+package br.edu.ifpb.gugawag.so.sockets;
+
+import java.io.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Map;
+
+public class ServerThread extends Thread {
+
+	private Socket clientSocket;
+	private Map<String, ArrayList<Subscritor>> topics;
+	private Map<String, String> news;
+	private String newTopic = null;
+	
+	public ServerThread(Socket clientSocket, Map<String, ArrayList<Subscritor>> topics, Map<String, String> news) {
+		this.clientSocket = clientSocket;
+		this.topics = topics;
+		this.news = news;
+	}
+	
+	public void run () {
+		DataOutputStream dos = null;
+		DataInputStream dis = null;
+		String topic = "";
+		String ip = "";
+		int port = 0;
+		Subscritor subscritor;
+		ArrayList<Subscritor> subscritors;
+		Socket socket = null;
+		DataOutputStream dosMsg = null;
+		DataInputStream disMsg = null;
+		boolean notSend = true;
+		
+		try {
+			dos = new DataOutputStream(clientSocket.getOutputStream());
+			dis = new DataInputStream(clientSocket.getInputStream());
+			ip = clientSocket.getInetAddress().getHostAddress();
+			port = clientSocket.getPort();
+		} catch (IOException e) {
+            e.printStackTrace();
+        }
+		
+		while (true) {
+			try {
+				topic = dis.readUTF();
+				
+			} catch (IOException e) {
+                e.printStackTrace();
+            }
+			
+			if(topic.equals("newSend")) {
+				try {
+					dos.writeUTF(Integer.toString(7100));
+					if(socket == null) {
+						socket = new Socket(ip, 7100);
+					}
+					if(dosMsg == null) {
+						dosMsg = new DataOutputStream(socket.getOutputStream());
+					}
+					if(disMsg == null) {
+						disMsg = new DataInputStream(socket.getInputStream());
+					}
+					while(notSend) {
+						SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+						String dateString = format.format(new Date());
+						long time = format.parse(dateString).getTime();
+						long timeMin = format.parse("08:00").getTime();
+						long timeMax = format.parse("22:00").getTime();
+						sleep(1000);
+						if(time > timeMin && time < timeMax) {
+							for(Map.Entry<String, String> notice : this.news.entrySet() ) {
+								String key = notice.getKey();
+								String value = notice.getValue();
+								if(key.equals(newTopic)) {
+									dosMsg.writeUTF(value);
+									notSend = false;
+								}
+							}
+						}
+						
+					}
+				} catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+			} else {
+				if (this.topics.get(topic) == null) {
+                    subscritors = new ArrayList<>();
+                    subscritor = new Subscritor(ip, port);
+                    subscritors.add(subscritor);
+                    this.topics.put(topic, subscritors);
+                    this.newTopic = topic;
+                    try {
+                        dos.writeUTF("Novo inscrito e novo tópico adicionado: " + topico);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    boolean isSbuscritor = false;
+                    subscritors = this.topicos.get(topico);
+                    for (Subscritor s : subscritors) {
+                        if (s.isSubscritor(ip, porta)) {
+                            try {
+                                dos.writeUTF("Já inscrito no tópico: " + topico);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            isSbuscritor = true;
+                            break;
+                        }
+                    }
+                    if (!isSbuscritor) {
+                        subscritors.add(new Subscritor(ip, porta));
+                        try {
+                            dos.writeUTF("Adicionado ao topico: " + topico);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+				
+			}
+
+		}
+	}
+}

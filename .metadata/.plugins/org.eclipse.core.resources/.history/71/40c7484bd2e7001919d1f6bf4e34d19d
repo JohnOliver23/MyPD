@@ -1,0 +1,91 @@
+package br.edu.ifpb.gugawag.so.sockets;
+
+import java.awt.List;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+
+public class ServerThread extends Thread {
+
+private Socket cliente;
+    
+    public ServerThread(Socket cliente) {
+        this.cliente = cliente;
+    }
+
+    public void run() {
+    	
+    	while(true) {
+            try { 
+            	DataInputStream input = null;
+                input = new DataInputStream(cliente.getInputStream());
+                String msg = input.readUTF(); 
+                System.out.println("o cliente"+ this.cliente.getInetAddress() + "/" + this.cliente.getPort() + " falou " + msg);
+                
+                DataOutputStream output = null;
+                output = new DataOutputStream(cliente.getOutputStream());
+                output.writeUTF("Servidor falou: recebi o action: "+msg);
+                
+                
+                String[] arrayMsgs = msg.split(" ");
+                String action = arrayMsgs[0];
+                String[] parametros = msg.split("\"");
+                
+                if(arrayMsgs.length<2) {
+                	output = null;
+                    output = new DataOutputStream(cliente.getOutputStream());
+                	output.writeUTF("comando inválido");
+                
+                }else {
+                	switch (action) {
+        			case "list":
+        				String topics = Repository.readTopics();
+        				if (topics != null) {
+    						output.writeUTF(topics);					
+        				}else {
+        					output.writeUTF("topicos inexistentes!");	
+        				}
+        				break;
+
+        			case "create":
+        				Topic topic = Repository.addTopic(parametros[1]);
+        				topic.addFollower(this.cliente);
+        				output.writeUTF("Topico criado com sucesso!");					
+        				break;
+
+        			case "addMsg":
+        				topic = Repository.getTopico(parametros[1]);
+        				if (topico!=null) {
+        					topico.addMensagens(parametros[3]);
+        					List<Socket> seguidores = topico.getSeguidores();
+        					if (!seguidores.isEmpty()) {
+        						for (Socket seguidor : seguidores) {
+            						DataOutputStream outputToSeguidor = new DataOutputStream(seguidor.getOutputStream());				
+            						outputToSeguidor.writeUTF("O topico: "+ topico.getNome() + " teve a msg '" + parametros[3] + "' adicionada recentemente!");
+            					}	
+        					}
+        				}
+    					break;
+        				
+        			case "seguir":
+        				topico = Repositorio.getTopico(parametros[1]);
+        				if (topico != null) {
+    						topico.addSeguidor(this.cliente);
+    						output.writeUTF("Seguindo topico: "+topico);
+        				}else {
+        					output.writeUTF("Topico nao existente!");	
+        				}		
+                    	break;
+        			default:
+        				output.writeUTF(arrayMsgs[0] + " nao eh um action reconhecido!");
+        				break;
+        			}    	
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}

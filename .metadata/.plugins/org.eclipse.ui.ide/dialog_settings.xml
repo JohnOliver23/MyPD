@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="/home/john/Documentos/Programacao DIstribuida/socket-ipc"/>
+		<item value="/home/john/Downloads/demo"/>
+		<item value="/home/john/Documentos/Programacao DIstribuida/hello-spring"/>
+	</list>
+	<section name="ExternalProjectImportWizard">
+	</section>
+	<section name="CleanDialogSettings">
+		<item key="DIALOG_X_ORIGIN" value="437"/>
+		<item key="DIALOG_Y_ORIGIN" value="124"/>
+		<item key="DIALOG_WIDTH" value="569"/>
+		<item key="DIALOG_HEIGHT" value="404"/>
+		<item key="TOGGLE_SELECTED" value="false"/>
+	</section>
+</section>
