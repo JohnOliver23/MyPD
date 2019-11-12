@@ -1,4 +1,7 @@
 package com.gugawag.mensageria;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -11,18 +14,17 @@ public class Produtor {
 	        //localizacao do gestor da fila (Queue Manager)
 	        connectionFactory.setHost("localhost");
 	        connectionFactory.setPort(5672);
-		
-		String NOME_FILA = "filaJson";
 
-		List<Livro> livros = new ArrayList<>();
-		for (int i=0; i<11; i++) {
-		    Livro livro = new Livro("Livro"+i, "Letras");
-		    livros.add(livro);
-		}
+	        String NOME_FILA = "filaJson";
 
-		JSONWriter jsonWriter = new JSONWriter();
-		String mensagem = jsonWriter.write(livros);
+	        List<Livro> livros = new ArrayList<>();
+	        for (int i=0; i<11; i++) {
+	            Livro livro = new Livro("Livro"+i, "Letras");
+	            livros.add(livro);
+	        }
 
+	        JSONWriter jsonWriter = new JSONWriter();
+	        String mensagem = jsonWriter.write(livros);
 	        try(
 	                //criacao de uma coneccao
 	                Connection connection = connectionFactory.newConnection();
@@ -33,7 +35,7 @@ public class Produtor {
 	            //Declaracao da fila. Se nao existir ainda no queue manager, serah criada. Se jah existir, e foi criada com
 	            // os mesmos parametros, pega a referencia da fila. Se foi criada com parametros diferentes, lanca excecao
 	            channel.queueDeclare(NOME_FILA, false, false, false, null);
-	            String mensagem = "Olá mundo!";
+	            mensagem = "Olá mundo!";
 	            //publica uma mensagem na fila
 	            channel.basicPublish("", NOME_FILA, null, mensagem.getBytes());
 	            System.out.println("Enviei mensagem: " + mensagem);
